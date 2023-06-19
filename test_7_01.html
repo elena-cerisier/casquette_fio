@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page d'accueil</title>
+    <style>
+        body {
+            background-color: #000; /* Couleur de fond par défaut */
+            background-image: url('ANCHOR/confetti-clipart-8.png');
+            background-repeat: repeat-y;
+          
+
+            background-size: 150%;
+            background-position: center;
+            transition: background-color 0.5s;
+            
+        }
+
+        .square {
+            position: absolute;
+            transition: transform 1s;
+            cursor: pointer;
+        }
+
+        #container {
+            position: relative;
+        }
+
+        .large-square {
+            opacity: 1;
+        }
+
+        .cube {
+            width: 100px;
+            height: 100px;
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: #000;
+            transition: transform 1s;
+            cursor: pointer;
+            transform: rotateX(45deg) rotateY(45deg);
+        }
+
+        .cube:hover {
+            transform: rotateX(45deg) rotateY(45deg) scale(1.1);
+        }
+        
+        .second-page {
+            opacity: 1;
+        }
+
+        .circle {
+            width: 20px;
+            height: 20px;
+            background-color: #000;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+
+        .top-left {
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-image: url('ANCHOR/1.png');
+        background-repeat: no-repeat;
+        background-position: top left;
+        z-index: 2; /* Valeur supérieure à l'arrière-plan */
+        }
+
+        .bottom-right {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        background-image: url('ANCHOR/2.png');
+        background-repeat: no-repeat;
+        background-position: bottom right;
+        z-index: 2; /* Valeur supérieure à l'arrière-plan */
+}
+    </style>
+</head>
+<body>
+
+    
+  
+
+    <div id="container"></div>
+    <div class="top-left"></div>
+    <div class="bottom-right"></div>
+
+    <script>
+        // Fonction pour générer une couleur néon aléatoire
+        function getRandomNeonColor() {
+            var neonColors = ['#ff00ff', '#00ffff', '#ff0000', '#00ff00', '#0000ff', '#ffff00'];
+            return neonColors[Math.floor(Math.random() * neonColors.length)];
+        }
+
+        // Changer la couleur de fond de la page d'accueil avec une couleur néon
+        document.addEventListener("DOMContentLoaded", function() {
+            document.body.style.backgroundColor = getRandomNeonColor();
+            
+
+        });
+
+        // Création des petits carrés avec des images
+        var container = document.getElementById("container");
+        var numImages = 62; // Nombre d'images à charger
+
+        for (var i = 1; i <= numImages; i++) {
+            (function(i) {
+                var image = new Image();
+                image.src = "IMG/image" + i + ".png";
+
+                image.onload = function() {
+                    var square = document.createElement("img");
+                    square.className = "square";
+                    square.src = image.src;
+                    square.style.width = image.width*0.13 + "px";
+                    square.style.height = image.height*0.13 + "px";
+                    square.style.transform = "rotate(" + (Math.random() * 180 - 45) + "deg)"; // Rotation aléatoire entre -90 et 90 degrés
+                    square.style.left = Math.random() * 90 + "vw"; // Placement aléatoire
+                    square.style.top = Math.random() * 90 + "vh"; // Placement aléatoire
+
+                    // Animation au survol
+                    square.addEventListener("mouseover", function() {
+                        this.style.transition = "transform 1s"; // Vitesse plus lente
+                        this.style.transform = "rotate(180deg)";
+                    });
+
+                    // Animation lorsque la souris quitte l'élément
+                    square.addEventListener("mouseout", function() {
+                        this.style.transition = "transform 1s"; // Vitesse plus lente
+                        this.style.transform = "none";
+                    });
+
+                    // Animation au clic
+                    square.addEventListener("click", function() {
+                        var squarePage = document.createElement("div");
+                        squarePage.className = "square large-square second-page"; // Classe "large-square" et "second-page" ajoutées
+
+                        var imageElement = document.createElement("img"); // Utilise un élément img pour afficher l'image
+                        imageElement.src = image.src; // Utilise l'image d'origine
+                        imageElement.style.width = image.width*0.5 + "px";
+                        imageElement.style.height = image.height*0.5 + "px";
+                        imageElement.style.transform ="translateY(-50%)"; // Placement aléatoire
+                        imageElement.style.transform = "translateX(-50%)"; // Placement aléatoire
+
+
+                        squarePage.appendChild(imageElement);
+
+
+                        var cube = document.createElement("div");
+                        cube.className = "cube"; // Classe "cube" ajoutée
+                        cube.addEventListener("click", function() {
+                            window.location.href = window.location.href; // Recharger la page d'accueil
+                        });
+
+                        squarePage.appendChild(cube);
+
+                        // Ajout des cercles noirs
+                        var circleContainer = document.createElement("div");
+                        circleContainer.style.position = "absolute";
+                        circleContainer.style.left = "-100px"; // Ajustez la distance des cercles ici
+                        circleContainer.style.left = "40%"; // Ajustez la position verticale des cercles ici
+                        circleContainer.style.transform = "translateY(-30%)"; // Centrage vertical des cercles
+
+                        for (var j = 0; j < 4; j++) {
+                            var circle = document.createElement("div");
+                            circle.className = "circle";
+                            circle.style.top = j * 50 + "px"; // Ajustez l'espacement horizontal des cercles ici
+                            circleContainer.appendChild(circle);
+                        }
+
+                        squarePage.appendChild(circleContainer);
+
+                        var squareContainer = document.createElement("div");
+                        squareContainer.id = "container";
+                        squareContainer.style.display = "flex";
+                        squareContainer.style.justifyContent = "center";
+                        squareContainer.style.alignItems = "center";
+                        squareContainer.style.height = "100vh";
+
+                        squareContainer.appendChild(squarePage);
+                        document.body.appendChild(squareContainer);
+                    });
+
+                    container.appendChild(square);
+                };
+            })(i);
+        }
+    </script>
+</body>
+</html>
